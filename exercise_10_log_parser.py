@@ -1,4 +1,5 @@
 # Ejercicio 10 - Parser de archivos de log
+from multiprocessing.util import log_to_stderr
 
 
 def parse_log(filename):
@@ -42,4 +43,34 @@ def parse_log(filename):
             "WARN": ["lento"],
         }
     """
-    pass  # Reemplazar con tu implementación
+
+
+    logs = {}
+
+    with open(filename, "r") as archivo:
+
+        for linea in archivo:
+
+            linea = linea.strip()
+
+            if linea != "":
+
+                if ":" not in linea:
+                    raise ValueError("invalid log line")
+
+                nivel, mensaje = linea.split(":", 1)
+
+                nivel = nivel.strip()
+
+                mensaje = mensaje.strip()
+
+                if nivel in logs:
+
+                    logs[nivel].append(mensaje)
+
+                else:
+
+                    logs[nivel] = [mensaje]
+
+    return logs
+
